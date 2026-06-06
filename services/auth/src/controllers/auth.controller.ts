@@ -36,7 +36,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     user,
   });
 });
-const allowedRoles = ["customer", "rider", "seller"] as const;
+const allowedRoles = ["customer", "rider", "restraunt"] as const;
 
 type Role = (typeof allowedRoles)[number];
 

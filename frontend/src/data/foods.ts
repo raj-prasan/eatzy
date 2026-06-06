@@ -1,0 +1,181 @@
+import type { Food, Restaurant } from "../types";
+
+export const RESTAURANTS: Restaurant[] = [
+  {
+    id: "r1",
+    name: "Bella Italia",
+    cuisine: "Italian, Gourmet Pasta, Pizza",
+    rating: 4.8,
+    reviews: 320,
+    deliveryTime: "15-25 mins",
+    deliveryFee: 2.99,
+    image: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=600",
+    description: "Traditional wood-fired Neapolitan pizzas and fresh house-made pasta tossed in rich sauces."
+  },
+  {
+    id: "r2",
+    name: "Bistro Wagyu",
+    cuisine: "Burgers, American Grill, Truffle",
+    rating: 4.9,
+    reviews: 410,
+    deliveryTime: "20-30 mins",
+    deliveryFee: 3.50,
+    image: "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?auto=format&fit=crop&q=80&w=600",
+    description: "Premium dry-aged Wagyu beef burgers, custom hand-cut seasoned fries, and gourmet grilled sides."
+  },
+  {
+    id: "r3",
+    name: "Green Lotus",
+    cuisine: "Organic, Wellness Bowls, Salads",
+    rating: 4.7,
+    reviews: 180,
+    deliveryTime: "10-20 mins",
+    deliveryFee: 1.50,
+    image: "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&q=80&w=600",
+    description: "Fresh nutrient-dense salads, warm organic grains, plant-based proteins, and healthy dressings."
+  },
+  {
+    id: "r4",
+    name: "Zen Garden & Matcha",
+    cuisine: "Japanese Sushi, Desserts, Tea Cafe",
+    rating: 4.9,
+    reviews: 220,
+    deliveryTime: "5-15 mins",
+    deliveryFee: 0.99,
+    image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&q=80&w=600",
+    description: "Authentic sushi rolls, ceremonial Uji matcha, organic leaf teas, and French-inspired bakery tarts."
+  }
+];
+
+export const FOODS: Food[] = [
+  {
+    id: "1",
+    name: "Truffle Tagliatelle Pasta",
+    category: "Gourmet",
+    price: 24.50,
+    rating: 4.9,
+    reviews: 142,
+    image: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&q=80&w=600",
+    description: "House-made fresh tagliatelle tossed in a rich, creamy black truffle butter sauce, finished with aged Parmigiano-Reggiano and fresh shaved Umbrian truffles.",
+    prepTime: "20-25 mins",
+    calories: 680,
+    tags: ["Chef's Special", "Pasta", "Vegetarian Option"],
+    ingredients: ["Fresh Tagliatelle", "Black Truffle Butter", "Aged Parmigiano", "Shaved Umbrian Truffles", "Fresh Chives"],
+    restaurantId: "r1",
+    restaurantName: "Bella Italia"
+  },
+  {
+    id: "2",
+    name: "Salmon Avocado Grain Bowl",
+    category: "Wellness",
+    price: 18.75,
+    rating: 4.8,
+    reviews: 218,
+    image: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600",
+    description: "Pan-seared Atlantic salmon served over a bed of warm organic quinoa, with hass avocado, heirloom cherry tomatoes, edamame, pickled cucumber, and ginger-miso dressing.",
+    prepTime: "15-20 mins",
+    calories: 540,
+    tags: ["Gluten Free", "High Protein", "Organic"],
+    ingredients: ["Seared Salmon", "Organic Quinoa", "Hass Avocado", "Edamame", "Pickled Cucumber", "Ginger-Miso Drizzle"],
+    restaurantId: "r3",
+    restaurantName: "Green Lotus"
+  },
+  {
+    id: "3",
+    name: "Wood-Fired Margherita Pizza",
+    category: "Gourmet",
+    price: 16.50,
+    rating: 4.7,
+    reviews: 320,
+    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=600",
+    description: "Traditional Neapolitan sourdough crust baked in our 900° wood fire oven, topped with San Marzano tomato sauce, fresh buffalo mozzarella, aromatic sweet basil, and extra virgin olive oil.",
+    prepTime: "10-15 mins",
+    calories: 790,
+    tags: ["Classic", "Vegetarian", "Wood-Fired"],
+    ingredients: ["Neapolitan Sourdough", "San Marzano Tomatoes", "Buffalo Mozzarella", "Fresh Sweet Basil", "EVOO"],
+    restaurantId: "r1",
+    restaurantName: "Bella Italia"
+  },
+  {
+    id: "4",
+    name: "Truffle Bistro Burger",
+    category: "Fast-food",
+    price: 19.50,
+    rating: 4.9,
+    reviews: 405,
+    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=600",
+    description: "Prime dry-aged Wagyu beef patty, melted gruyère cheese, caramelized onions, wild arugula, and house-made black truffle aioli served on a toasted buttered brioche bun.",
+    prepTime: "15-20 mins",
+    calories: 850,
+    tags: ["Best Seller", "Wagyu", "Premium"],
+    ingredients: ["Wagyu Beef Patty", "Melted Gruyère", "Caramelized Onions", "Wild Arugula", "Truffle Aioli", "Brioche Bun"],
+    restaurantId: "r2",
+    restaurantName: "Bistro Wagyu"
+  },
+  {
+    id: "5",
+    name: "Avocado Green Garden Salad",
+    category: "Wellness",
+    price: 14.00,
+    rating: 4.6,
+    reviews: 98,
+    image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=600",
+    description: "Crisp organic baby gem lettuce, avocado slices, cucumber ribbons, green peas, sugar snap peas, and micro greens, tossed in a light herb-lemon vinaigrette.",
+    prepTime: "10 mins",
+    calories: 290,
+    tags: ["Vegan", "Gluten Free", "Superfood"],
+    ingredients: ["Baby Gem Lettuce", "Sliced Avocado", "Cucumber Ribbons", "Sugar Snap Peas", "Micro Greens", "Lemon-Herb Vinaigrette"],
+    restaurantId: "r3",
+    restaurantName: "Green Lotus"
+  },
+  {
+    id: "6",
+    name: "Gourmet Salmon Roll Sushi",
+    category: "Gourmet",
+    price: 22.00,
+    rating: 4.8,
+    reviews: 187,
+    image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&q=80&w=600",
+    description: "Signature inside-out sushi roll with spicy salmon, cucumber, and asparagus, topped with fresh seared salmon slices, spicy mayo, unagi eel sauce, and micro sprouts.",
+    prepTime: "20-25 mins",
+    calories: 420,
+    tags: ["Signature", "Seafood", "Freshly Rolled"],
+    ingredients: ["Sushi Rice", "Spicy Salmon", "Fresh Salmon Slices", "Spicy Mayo", "Unagi Sauce", "Nori"],
+    restaurantId: "r4",
+    restaurantName: "Zen Garden & Matcha"
+  },
+  {
+    id: "7",
+    name: "Raspberry Panna Cotta",
+    category: "Desserts",
+    price: 11.50,
+    rating: 4.9,
+    reviews: 76,
+    image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&q=80&w=600",
+    description: "Silky Madagascar vanilla bean panna cotta served with a vibrant fresh raspberry coulis, edible flowers, and white chocolate curls.",
+    prepTime: "5 mins",
+    calories: 320,
+    tags: ["Sweet", "Cold", "Gluten Free"],
+    ingredients: ["Madagascar Vanilla Bean", "Fresh Cream", "Raspberry Coulis", "White Chocolate Curls", "Edible Flowers"],
+    restaurantId: "r4",
+    restaurantName: "Zen Garden & Matcha"
+  },
+  {
+    id: "8",
+    name: "Iced Matcha Oat Latte",
+    category: "Beverages",
+    price: 7.25,
+    rating: 4.7,
+    reviews: 154,
+    image: "https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&q=80&w=600",
+    description: "Ceremonial grade Uji matcha whisked to perfection, served over cold organic oat milk, ice, and a subtle touch of organic raw agave nectar.",
+    prepTime: "5 mins",
+    calories: 140,
+    tags: ["Vegan", "Organic", "Antioxidant Rich"],
+    ingredients: ["Ceremonial Uji Matcha", "Organic Oat Milk", "Ice", "Raw Agave Nectar"],
+    restaurantId: "r4",
+    restaurantName: "Zen Garden & Matcha"
+  }
+];
+
+export const CATEGORIES = ["All", "Gourmet", "Wellness", "Fast-food", "Desserts", "Beverages"];
