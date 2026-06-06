@@ -9,12 +9,14 @@ export interface AuthenticatedUser extends Request {
 }
 export const isAuth = asyncHandler(
   async (req: AuthenticatedUser, res: Response, next: NextFunction) => {
+
     const token =
-      req.cookies?.accessToken ||
-      req.header("Authorization")?.replace("Bearer ", "");
+       req.cookies?.accessToken ||
+       req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
       throw new ApiError(401, "Unauthorized Request");
     }
+    console.log("TOKEN:", token);
     const decodedToken = jwt.verify(
       token,
       process.env.JWT_SECRET as string,
