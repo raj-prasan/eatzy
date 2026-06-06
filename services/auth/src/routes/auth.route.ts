@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { loginUser } from "../controllers/auth.controller.js";
-import { addUserRole, isAuth } from "../middlewares/auth.middleware.js";
+import { addUserRole, loginUser, myProfile } from "../controllers/auth.controller.js";
+import {isAuth } from "../middlewares/auth.middleware.js";
 
 const authRouter = Router()
 
 authRouter.route("/login").post(loginUser)
 authRouter.route("/add/role").put(isAuth, addUserRole)
+authRouter.route("/me").put(isAuth, myProfile)
 
 export default authRouter
