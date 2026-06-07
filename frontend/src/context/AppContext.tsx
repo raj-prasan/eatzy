@@ -1,50 +1,143 @@
 import axios from "axios";
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { authService } from "../main";
-import type { AppContextType, User } from "../types";
+import type { AppContextType, LocationData, User } from "../types";
+import toast from "react-hot-toast";
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-interface AppProviderProps{
-  children: ReactNode
+interface AppProviderProps {
+  children: ReactNode;
 }
 
-export const AppProvider = ({children}: AppProviderProps)=>{
-  const[user, setUser] = useState<User | null>(null);
-  const[isAuth, setIsAuth] = useState(false);
-  const[loading, setLoading] = useState(true);
+export const AppProvider = ({ children }: AppProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isAuth, setIsAuth] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  async function fetchUser(){
+  const [location, setLocation] = useState<LocationData | null>(null);
+  const [loadingLocation, setLoadingLocation] = useState(false);
+  const [city, setCity] = useState("Fetching Location");
+
+  async function fetchUser() {
     try {
       const token = await cookieStore.get("token");
       console.log("TOKEN:", token);
-      const {data} = await axios.get(`${authService}/api/v1/auth/me`,{
-        headers:{
-          Authorization: `Bearer ${token?.value}`
-        }
-      })
+      const { data } = await axios.get(`${authService}/api/v1/auth/me`, {
+        headers: {
+          Authorization: `Bearer ${token?.value}`,
+        },
+      });
       setUser(data.user);
       setIsAuth(true);
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       console.log(error);
-      setLoading(false)
+      setLoading(false);
       setUser(null);
       setIsAuth(false);
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   }
-  useEffect(()=> {
-    fetchUser()
-  },[]);
-  return<AppContext.Provider value={{isAuth, loading,setIsAuth,setLoading, setUser, user}}>{children}</AppContext.Provider>
-}
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
-export const useAppData = ():AppContextType=>{
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      toast.error("Please Allow location to continue.", {
+        style: {
+          background: "#151515",
+          color: "#fbfaf7",
+          borderRadius: "16px",
+        },
+      });
+      return;
+    } else {
+      setLoadingLocation(true);
+      const successCallback = async (position: GeolocationPosition) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          console.log("Latitude:", latitude, "Longitude:", longitude);
+
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+          );
+          const data = await res.json();
+          setLocation({
+            latitude,
+            longitude,
+            formattedAddress: data.display_name || "Current Location",
+          });
+          
+          console.log("Nominatim Address Object:", data.address);
+          setCity(
+            data.address?.city ||
+              data.address?.town ||
+              data.address?.village ||
+              data.address?.suburb ||
+              data.address?.municipality ||
+              data.address?.county ||
+              data.address?.neighbourhood ||
+
+              "Your City",
+          );
+          setLoadingLocation(false);
+        } catch (error) {
+          console.error("Error fetching address:", error);
+          setLocation({
+            latitude,
+            longitude,
+            formattedAddress: "Current Location",
+          });
+          setCity("Failed to Load");
+          setLoadingLocation(false);
+        }
+      };
+
+      const errorCallback = (error: GeolocationPositionError) => {
+        console.warn(`High accuracy geolocation failed (${error.code}): ${error.message}. Trying fallback low accuracy...`);
+        navigator.geolocation.getCurrentPosition(
+          successCallback,
+          (fallbackError) => {
+            console.error("Fallback geolocation failed:", fallbackError);
+            setLoadingLocation(false);
+          },
+          {
+            enableHighAccuracy: false,
+            maximumAge: 60000, // Accept cached position up to 1 minute old
+            timeout: 10000,
+          }
+        );
+      };
+
+      navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {
+        enableHighAccuracy: true,
+        maximumAge: 0, // Request fresh coordinates
+        timeout: 5000, // Timeout after 5 seconds to fallback quickly
+      });
+    }
+  }, []);
+
+  return (
+    <AppContext.Provider
+      value={{ isAuth, loading, setIsAuth, setLoading, setUser, user ,loadingLocation, location, city}}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export const useAppData = (): AppContextType => {
   const context = useContext(AppContext);
-  if(!context){
-    throw new Error("useAppData must be within AppProvider")
+  if (!context) {
+    throw new Error("useAppData must be within AppProvider");
   }
   return context;
-}
+};

@@ -14,7 +14,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   cartCount,
   onLogOut,
 }) => {
-  const {isAuth, user} = useAppData()
+  const {isAuth, user, city} = useAppData()
   const currLocation = useLocation()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
             <div className="hidden md:flex items-center space-x-1.5 px-3 py-1 bg-cream-dark rounded-full text-xs text-sage font-medium">
               <MapPin className="h-3.5 w-3.5 text-terracotta" />
-              <span>India</span>
+              <span>{city}</span>
             </div>
           </Link>
 
@@ -106,6 +106,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                       
                       <div className="h-[1px] bg-cream-dark my-2" />
                       
+                      <button
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          navigate("/account");
+                        }}
+                        className="w-full flex items-center space-x-2.5 px-2 py-2.5 rounded-xl text-xs font-semibold text-charcoal/70 hover:text-terracotta hover:bg-cream-dark/50 transition-smooth cursor-pointer"
+                      >
+                        <UserIcon className="h-4 w-4" />
+                        <span>My Account</span>
+                      </button>
+
                       <button
                         onClick={() => {
                           setIsDropdownOpen(false);
