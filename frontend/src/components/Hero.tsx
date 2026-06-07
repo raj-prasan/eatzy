@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Star, ShieldCheck, Flame } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
 
-interface HeroProps {
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-}
 
-export const Hero: React.FC<HeroProps> = ({ searchQuery, setSearchQuery }) => {
+export const Hero = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [search , setSearch]= useState(searchParams.get("search") || "");
+  useEffect(()=>{
+    const timer = setTimeout(()=>{
+      if(search){
+        setSearchParams({search})
+      }
+      else{
+        setSearchParams({})
+      }
+    }, 400)
+    return ()=> clearTimeout(timer)
+  },[search])
   return (
     <section className="relative overflow-hidden pt-12 pb-24 md:pt-20">
       {/* Background decoration elements */}
@@ -41,8 +51,8 @@ export const Hero: React.FC<HeroProps> = ({ searchQuery, setSearchQuery }) => {
                 <Search className="h-5 w-5 text-charcoal/40 ml-3.5 flex-shrink-0" />
                 <input
                   type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search gourmet pasta, truffle burgers, green salad..."
                   className="w-full bg-transparent px-3 py-3.5 text-sm text-charcoal outline-none placeholder-charcoal/45 font-medium"
                 />

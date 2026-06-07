@@ -16,14 +16,14 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
   return (
     <div
       onClick={onClick}
-      className={`group flex flex-col overflow-hidden bg-white rounded-3xl border transition-smooth cursor-pointer ${
+      className={`group flex flex-col w-full min-w-0 overflow-hidden bg-white rounded-3xl border transition-smooth cursor-pointer ${
         isSelected
           ? "border-terracotta ring-2 ring-terracotta/20 shadow-[0_15px_30px_-5px_rgba(230,92,64,0.08)] scale-102"
           : "border-cream-dark shadow-[0_4px_20px_-5px_rgba(21,21,21,0.01)] hover:border-cream-dark hover:shadow-[0_15px_30px_-10px_rgba(21,21,21,0.05)] hover:-translate-y-1"
       }`}
     >
       {/* Cover Image */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-cream-dark">
+      <div className="relative aspect-16/10 w-full overflow-hidden bg-cream-dark">
         <img
           src={restaurant.image}
           alt={restaurant.name}
@@ -37,7 +37,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
       </div>
 
       {/* Details info */}
-      <div className="p-6 text-left flex-grow flex flex-col justify-between">
+      <div className="p-6 text-left grow flex flex-col justify-between">
         <div>
           {/* Cuisine / Tags */}
           <span className="text-xs text-terracotta font-bold uppercase tracking-wider block mb-1.5">

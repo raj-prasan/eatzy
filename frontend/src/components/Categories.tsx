@@ -11,8 +11,8 @@ export const Categories: React.FC<CategoriesProps> = ({
   setActiveCategory,
 }) => {
   return (
-    <div className="w-full mb-10 overflow-x-auto pb-4 scrollbar-none">
-      <div className="flex items-center justify-start md:justify-center space-x-3 md:space-x-4 px-4">
+    <div className="w-full mb-10 overflow-x-hidden pb-4 scrollbar-none">
+      <div className="flex flex-wrap items-center justify-center gap-3 md:gap-4 px-4">
         {CATEGORIES.map((cat) => {
           const isActive = activeCategory === cat;
           return (

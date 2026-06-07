@@ -18,10 +18,10 @@ export const FoodCard: React.FC<FoodCardProps> = ({
   return (
     <div
       onClick={() => onCardClick(food)}
-      className="group flex flex-col justify-between overflow-hidden bg-white rounded-3xl border border-cream-dark shadow-[0_4px_20px_-5px_rgba(21,21,21,0.02)] transition-smooth hover:shadow-[0_20px_40px_-15px_rgba(21,21,21,0.06)] hover:-translate-y-1.5 cursor-pointer"
+      className="group flex flex-col justify-between min-w-0 overflow-hidden bg-white rounded-3xl border border-cream-dark shadow-[0_4px_20px_-5px_rgba(21,21,21,0.02)] transition-smooth hover:shadow-[0_20px_40px_-15px_rgba(21,21,21,0.06)] hover:-translate-y-1.5 cursor-pointer"
     >
       {/* Food Image Container */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-cream-dark">
+      <div className="relative aspect-4/3 w-full overflow-hidden bg-cream-dark">
         <img
           src={food.image}
           alt={food.name}
@@ -37,7 +37,7 @@ export const FoodCard: React.FC<FoodCardProps> = ({
       </div>
 
       {/* Details Area */}
-      <div className="p-6 flex-grow flex flex-col justify-between text-left">
+      <div className="p-6 grow flex flex-col justify-between text-left">
         <div>
           {/* Metadata Row */}
           <div className="flex items-center justify-between text-xs text-charcoal/50 font-medium mb-2.5">

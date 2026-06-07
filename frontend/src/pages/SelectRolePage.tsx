@@ -28,6 +28,7 @@ const SelectRolePage = () => {
         navigate("/", {replace: true})
       }
     } catch (error) {
+      alert("Something got wrong.")
       console.log(error)
     }
   };

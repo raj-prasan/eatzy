@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { ShoppingBag, User as UserIcon, MapPin, LogOut } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import type { User } from "../types";
+import { useAppData } from "../context/AppContext";
 
 interface NavbarProps {
   cartCount: number;
@@ -11,9 +12,10 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({
   cartCount,
-  user,
   onLogOut,
 }) => {
+  const {isAuth, user} = useAppData()
+  const currLocation = useLocation()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </span>
             <div className="hidden md:flex items-center space-x-1.5 px-3 py-1 bg-cream-dark rounded-full text-xs text-sage font-medium">
               <MapPin className="h-3.5 w-3.5 text-terracotta" />
-              <span>Deliver to: Beverly Hills, CA</span>
+              <span>India</span>
             </div>
           </Link>
 

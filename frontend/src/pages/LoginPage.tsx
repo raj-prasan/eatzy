@@ -6,11 +6,12 @@ import { authService } from "../main";
 import axios from "axios";
 import { useGoogleLogin } from '@react-oauth/google';
 import{FcGoogle} from "react-icons/fc"
+import { useAppData } from "../context/AppContext";
 
 export const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
+  const {setIsAuth, setUser, user} = useAppData()
   const responseGoogle = async (authResult: any) => {
     setLoading(true);
     try {
@@ -20,7 +21,12 @@ export const LoginPage: React.FC = () => {
       cookieStore.set("token", result.data.token);
       setLoading(false);
 
-      toast.success(`Welcome back, Prasan`, {
+      
+      setLoading(false)
+      setUser(result.data.user)
+      setIsAuth(true)
+      
+      toast.success(`Welcome back, ${result.data.user.name}`, {
         duration: 4000,
         style: {
           background: "#151515",

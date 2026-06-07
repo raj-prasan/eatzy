@@ -5,6 +5,7 @@ import { CartPage } from "./pages/CartPage"
 import PublicRoute from "./components/publicRoute"
 import ProtectedRoute from "./components/protectedRoute"
 import SelectRolePage from "./pages/SelectRolePage"
+import Accountpage from "./pages/Accountpage"
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path='/' element={<HomePage/>}/> 
           <Route path='/cart' element={<CartPage/>}/> 
           <Route path='/select-role' element={<SelectRolePage/>}/> 
+          <Route path='/account' element={<Accountpage/>}/> 
         </Route>
         
         

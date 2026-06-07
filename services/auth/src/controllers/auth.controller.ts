@@ -36,7 +36,7 @@ export const loginUser = asyncHandler(async (req: Request, res: Response) => {
     user,
   });
 });
-const allowedRoles = ["customer", "rider", "restraunt"] as const;
+const allowedRoles = ["customer", "rider", "restaurant"] as const;
 
 type Role = (typeof allowedRoles)[number];
 
@@ -51,7 +51,7 @@ export const addUserRole = asyncHandler(
       throw new ApiError(400, "Invalid Role");
     }
 
-    const user = await User.findByIdAndUpdate(req.user._id, { role }, { new: true });
+    const user = await User.findByIdAndUpdate(req.user._id, { role: role }, { new: true });
 
     if (!user) {
       throw new ApiError(401, "User not found.");
@@ -69,5 +69,7 @@ export const addUserRole = asyncHandler(
 
 export const myProfile = asyncHandler(async (req: AuthenticatedUser, res: Response)=>{
   const user = req.user
-  res.status(200).json(user)
+  res.status(200).json({
+    user
+  })
 })

@@ -11,6 +11,7 @@ import { Testimonials } from "../components/Testimonials";
 import { Footer } from "../components/Footer";
 import { RESTAURANTS, FOODS } from "../data/foods";
 import type { Food, User } from "../types";
+import { useAppData } from "../context/AppContext";
 
 const HomePage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("All");
@@ -18,11 +19,8 @@ const HomePage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
 
-  // Auth state loaded from localStorage
-  const [user, setUser] = useState<User | null>(() => {
-    const saved = localStorage.getItem("user");
-    return saved ? JSON.parse(saved) : null;
-  });
+  
+  const {user, setUser, setIsAuth} = useAppData()
 
   // Cart Handlers - show toast and guide user to Cart page
   const handleAddToCart = (food: Food) => {
@@ -36,8 +34,9 @@ const HomePage: React.FC = () => {
   };
 
   const handleLogOut = () => {
-    localStorage.removeItem("user");
+    cookieStore.delete("token")
     setUser(null);
+    setIsAuth(false);
     toast.success("Successfully logged out. Come back soon! 👋", {
       style: {
         background: "#151515",
@@ -78,7 +77,7 @@ const HomePage: React.FC = () => {
       />
 
       {/* Hero Header */}
-      <Hero searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Hero />
 
       {/* Restaurants Section */}
       <section id="restaurants" className="py-20 bg-cream mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center scroll-mt-20">
@@ -116,7 +115,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Menu Listing */}
-      <section id="menu" className="py-20 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center scroll-mt-20 border-t border-cream-dark">
+      <section id="menu" className="py-20 mx-auto min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8 text-center scroll-mt-20 border-t border-cream-dark">
         <span className="text-xs font-bold uppercase tracking-widest text-terracotta mb-2.5 block">
           CURATED DELICACIES
         </span>
@@ -125,7 +124,7 @@ const HomePage: React.FC = () => {
         </h2>
         
         {activeRestaurantName ? (
-          <div className="mb-8 flex items-center justify-center space-x-3 bg-terracotta/10 px-4 py-2 rounded-full inline-flex mx-auto transition-smooth animate-fade-in">
+          <div className="mb-8 inline-flex items-center justify-center space-x-3 bg-terracotta/10 px-4 py-2 rounded-full mx-auto transition-smooth animate-fade-in">
             <span className="text-xs font-bold text-terracotta uppercase">
               Showing dishes from: <span className="underline">{activeRestaurantName}</span>
             </span>
