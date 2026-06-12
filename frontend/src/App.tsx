@@ -6,6 +6,7 @@ import PublicRoute from "./components/publicRoute"
 import ProtectedRoute from "./components/protectedRoute"
 import SelectRolePage from "./pages/SelectRolePage"
 import Accountpage from "./pages/Accountpage"
+import AddRestaurantPage from "./pages/AddRestaurantPage"
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path='/cart' element={<CartPage/>}/> 
           <Route path='/select-role' element={<SelectRolePage/>}/> 
           <Route path='/account' element={<Accountpage/>}/> 
+          <Route path='/add-restaurant' element={<AddRestaurantPage/>}/>
         </Route>
         
         

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingBag, Bike, Store, ArrowRight, ArrowLeft } from "lucide-react";
+import { ShoppingBag, Bike, Store, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { authService } from "../main";
@@ -10,7 +10,7 @@ type Role = "customer" | "rider" | "restaurant";
 const SelectRolePage = () => {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const navigate = useNavigate();
-  const {user, setUser} = useAppData();
+  const {setUser} = useAppData();
 
   const handleContinue = async() => {
     try {
@@ -25,7 +25,13 @@ const SelectRolePage = () => {
           }
         })
         setUser(data.user)
-        navigate("/", {replace: true})
+        await cookieStore.set("token", data.token);
+        
+        if (selectedRole === "restaurant") {
+          navigate("/add-restaurant", {replace: true})
+        } else {
+          navigate("/", {replace: true})
+        }
       }
     } catch (error) {
       alert("Something got wrong.")

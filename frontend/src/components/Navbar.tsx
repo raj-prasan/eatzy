@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ShoppingBag, User as UserIcon, MapPin, LogOut } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { User } from "../types";
 import { useAppData } from "../context/AppContext";
 
@@ -14,8 +14,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   cartCount,
   onLogOut,
 }) => {
-  const {isAuth, user, city} = useAppData()
-  const currLocation = useLocation()
+  const {user, city} = useAppData()
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 

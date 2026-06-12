@@ -66,26 +66,24 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         try {
           console.log("Latitude:", latitude, "Longitude:", longitude);
 
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`,
+          const response = await fetch(
+            `http://localhost:5002/api/v1/location?lat=${latitude}&lon=${longitude}`,
           );
-          const data = await res.json();
+
+          const data = await response.json();
           setLocation({
             latitude,
             longitude,
             formattedAddress: data.display_name || "Current Location",
           });
-          
-          console.log("Nominatim Address Object:", data.address);
+
           setCity(
-            data.address?.city ||
               data.address?.town ||
               data.address?.village ||
               data.address?.suburb ||
               data.address?.municipality ||
               data.address?.county ||
               data.address?.neighbourhood ||
-
               "Your City",
           );
           setLoadingLocation(false);
@@ -102,7 +100,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       };
 
       const errorCallback = (error: GeolocationPositionError) => {
-        console.warn(`High accuracy geolocation failed (${error.code}): ${error.message}. Trying fallback low accuracy...`);
+        console.warn(
+          `High accuracy geolocation failed (${error.code}): ${error.message}. Trying fallback low accuracy...`,
+        );
         navigator.geolocation.getCurrentPosition(
           successCallback,
           (fallbackError) => {
@@ -113,7 +113,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
             enableHighAccuracy: false,
             maximumAge: 60000, // Accept cached position up to 1 minute old
             timeout: 10000,
-          }
+          },
         );
       };
 
@@ -127,7 +127,17 @@ export const AppProvider = ({ children }: AppProviderProps) => {
 
   return (
     <AppContext.Provider
-      value={{ isAuth, loading, setIsAuth, setLoading, setUser, user ,loadingLocation, location, city}}
+      value={{
+        isAuth,
+        loading,
+        setIsAuth,
+        setLoading,
+        setUser,
+        user,
+        loadingLocation,
+        location,
+        city,
+      }}
     >
       {children}
     </AppContext.Provider>

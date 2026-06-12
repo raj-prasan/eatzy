@@ -11,7 +11,7 @@ import { useAppData } from "../context/AppContext";
 export const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const {setIsAuth, setUser, user} = useAppData()
+  const {setIsAuth, setUser} = useAppData()
   const responseGoogle = async (authResult: any) => {
     setLoading(true);
     try {

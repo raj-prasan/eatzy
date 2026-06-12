@@ -68,7 +68,10 @@ export const addUserRole = asyncHandler(
 );
 
 export const myProfile = asyncHandler(async (req: AuthenticatedUser, res: Response)=>{
-  const user = req.user
+  if (!req.user?._id) {
+    throw new ApiError(401, "Unauthenticated");
+  }
+  const user = await User.findById(req.user._id);
   res.status(200).json({
     user
   })

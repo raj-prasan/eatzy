@@ -10,13 +10,15 @@ import { Features } from "../components/Features";
 import { Testimonials } from "../components/Testimonials";
 import { Footer } from "../components/Footer";
 import { RESTAURANTS, FOODS } from "../data/foods";
-import type { Food, User } from "../types";
+import type { Food } from "../types";
 import { useAppData } from "../context/AppContext";
+import { useSearchParams } from "react-router-dom";
 
 const HomePage: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
 
   
