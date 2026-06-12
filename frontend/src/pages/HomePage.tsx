@@ -12,7 +12,8 @@ import { Footer } from "../components/Footer";
 import { RESTAURANTS, FOODS } from "../data/foods";
 import type { Food } from "../types";
 import { useAppData } from "../context/AppContext";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import AddRestaurantPage from "./AddRestaurantPage";
 
 const HomePage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -20,9 +21,12 @@ const HomePage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedRestaurantId, setSelectedRestaurantId] = useState<string | null>(null);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
-
+  const navigate = useNavigate();
   
   const {user, setUser, setIsAuth} = useAppData()
+  if(user && user.role == "restaurant"){
+    navigate("/restaurant")
+  }
 
   // Cart Handlers - show toast and guide user to Cart page
   const handleAddToCart = (food: Food) => {

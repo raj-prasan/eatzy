@@ -7,8 +7,6 @@ import {
   MapPin,
   AlignLeft,
   Utensils,
-  Clock,
-  DollarSign,
   Upload,
   Compass,
   CheckCircle,
@@ -16,98 +14,109 @@ import {
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { useAppData } from "../context/AppContext";
+import axios from "axios";
+import { restaurantService } from "../main";
 
 export const AddRestaurantPage: React.FC = () => {
   const navigate = useNavigate();
-  const { location, city, loadingLocation, user } = useAppData();
+  const { location, loadingLocation } = useAppData();
 
   // Form states
   const [restaurantName, setRestaurantName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [restaurantLocation, setRestaurantLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [cuisine, setCuisine] = useState("");
-  const [prepTime, setPrepTime] = useState("30 mins");
-  const [deliveryFee, setDeliveryFee] = useState("4.99");
-  
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [restaurantLocation, setRestaurantLocation] = useState(
+    location?.formattedAddress ?? "",
+  );
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
   // Drag and drop mock file state
   const [fileName, setFileName] = useState<string | null>(null);
 
   const handleUseCurrentLocation = () => {
-    if (loadingLocation) {
-      toast.error("Detecting your location... please wait", {
-        style: {
-          background: "#151515",
-          color: "#fbfaf7",
-          borderRadius: "16px",
-        },
-      });
-      return;
-    }
-    
     if (location?.formattedAddress) {
       setRestaurantLocation(location.formattedAddress);
-      toast.success("Location pre-filled from context! 📍", {
-        style: {
-          background: "#151515",
-          color: "#fbfaf7",
-          borderRadius: "16px",
-        },
-      });
-    } else if (city && city !== "Fetching Location" && city !== "Failed to Load") {
-      setRestaurantLocation(city);
-      toast.success(`Location set to: ${city} 📍`, {
-        style: {
-          background: "#151515",
-          color: "#fbfaf7",
-          borderRadius: "16px",
-        },
-      });
-    } else {
-      toast.error("Could not fetch location from context. Please type manually.", {
-        style: {
-          background: "#151515",
-          color: "#fbfaf7",
-          borderRadius: "16px",
-        },
-      });
+      return;
     }
-  };
 
-  const handleMockUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFileName(file.name);
-      toast.success(`Mock Upload: ${file.name} received! 📸`, {
-        style: {
-          background: "#151515",
-          color: "#fbfaf7",
-          borderRadius: "16px",
-        },
-      });
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Non-functional mock submit
-    toast.success("Welcome aboard! Onboarding demo completed successfully. 🎉", {
-      duration: 5000,
+    toast.error("Current location is not available yet.", {
       style: {
         background: "#151515",
         color: "#fbfaf7",
         borderRadius: "16px",
       },
     });
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
+  };
+
+  const handleMockUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setFileName(file.name);
+      toast.success(`Upload: ${file.name} received! 📸`, {
+        style: {
+          background: "#151515",
+          color: "#fbfaf7",
+          borderRadius: "16px",
+        },
+      });
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!selectedFile) {
+      toast.error("Please upload a restaurant image.");
+      return;
+    }
+
+    try {
+      const token = await cookieStore.get("token");
+      const formData = new FormData();
+      formData.append("name", restaurantName);
+      formData.append("description", description);
+      formData.append("latitude", String(location?.latitude ?? ""));
+      formData.append("longitude", String(location?.longitude ?? ""));
+      formData.append("formattedAddress", restaurantLocation);
+      formData.append("phone", phoneNumber);
+      formData.append("file", selectedFile);
+
+      const result = await axios.post(
+        `${restaurantService}/api/v1/restaurant/new`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token?.value}`,
+          },
+        },
+      );
+      toast.success(
+        "Welcome aboard! Onboarding completed successfully. 🎉",
+        {
+          duration: 5000,
+          style: {
+            background: "#151515",
+            color: "#fbfaf7",
+            borderRadius: "16px",
+          },
+        },
+      );
+      setTimeout(() => {
+        navigate("/restaurant");
+      }, 2000);
+      console.log(result)
+    } catch (error) {
+      toast.error("Something went wrong!!!");
+      console.log(error)
+    }
+    
   };
 
   return (
     <div className="min-h-screen w-full flex flex-col justify-between bg-cream relative overflow-x-hidden font-sans">
       <Toaster position="bottom-right" reverseOrder={false} />
-      
+
       {/* Background Gradients */}
       <div className="absolute top-[-20%] left-[-10%] w-[50%] aspect-square rounded-full bg-terracotta/5 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-20%] right-[-10%] w-[50%] aspect-square rounded-full bg-sage/5 blur-[120px] pointer-events-none" />
@@ -127,9 +136,8 @@ export const AddRestaurantPage: React.FC = () => {
       </header>
 
       {/* Onboarding Form Container */}
-      <main className="w-full flex-grow flex items-center justify-center p-4 z-10 my-6">
+      <main className="w-full grow flex items-center justify-center p-4 z-10 my-6">
         <div className="w-full max-w-3xl bg-white/80 backdrop-blur-md rounded-[2.5rem] border border-cream-dark p-8 md:p-12 shadow-2xl transition-smooth flex flex-col text-left">
-          
           {/* Header Title */}
           <div className="text-center mb-10">
             <span className="inline-flex items-center space-x-2 px-3.5 py-1.5 bg-terracotta/10 rounded-full text-xs font-bold text-terracotta uppercase tracking-wider mb-3">
@@ -140,15 +148,14 @@ export const AddRestaurantPage: React.FC = () => {
               Onboard Your Restaurant
             </h1>
             <p className="text-sm text-charcoal/50 font-light max-w-md mx-auto">
-              Ready to serve gourmet culinary experiences? Provide your kitchen details to create your digital storefront.
+              Ready to serve gourmet culinary experiences? Provide your kitchen
+              details to create your digital storefront.
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-8">
-            
             {/* Grid for basic details */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
               {/* Restaurant Name */}
               <div className="space-y-2">
                 <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider block">
@@ -188,7 +195,6 @@ export const AddRestaurantPage: React.FC = () => {
                   />
                 </div>
               </div>
-
             </div>
 
             {/* Location (with Autofill helper) */}
@@ -200,10 +206,13 @@ export const AddRestaurantPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleUseCurrentLocation}
+                  disabled={loadingLocation}
                   className="flex items-center space-x-1 px-3 py-1 bg-sage/10 text-sage hover:bg-sage/20 text-[10px] font-bold rounded-lg uppercase tracking-wider transition-smooth cursor-pointer"
                 >
                   <Compass className="h-3 w-3" />
-                  <span>Use Current Location</span>
+                  <span>
+                    {loadingLocation ? "Locating..." : "Use Current Location"}
+                  </span>
                 </button>
               </div>
               <div className="relative flex items-center">
@@ -222,68 +231,7 @@ export const AddRestaurantPage: React.FC = () => {
             </div>
 
             {/* Grid for cuisine & mock details */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              
-              {/* Cuisine */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider block">
-                  Cuisine Type
-                </label>
-                <div className="relative flex items-center">
-                  <div className="absolute left-4 text-charcoal/40">
-                    <Utensils className="h-4 w-4" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="e.g. Italian, Sushi"
-                    value={cuisine}
-                    onChange={(e) => setCuisine(e.target.value)}
-                    className="w-full bg-cream-dark/30 border border-cream-dark/80 rounded-2xl pl-12 pr-4 py-3.5 text-sm font-medium text-charcoal placeholder-charcoal/30 outline-none focus:border-terracotta focus:bg-white transition-smooth shadow-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Prep Time */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider block">
-                  Est. Delivery/Prep Time
-                </label>
-                <div className="relative flex items-center">
-                  <div className="absolute left-4 text-charcoal/40">
-                    <Clock className="h-4 w-4" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="e.g. 25-35 mins"
-                    value={prepTime}
-                    onChange={(e) => setPrepTime(e.target.value)}
-                    className="w-full bg-cream-dark/30 border border-cream-dark/80 rounded-2xl pl-12 pr-4 py-3.5 text-sm font-medium text-charcoal placeholder-charcoal/30 outline-none focus:border-terracotta focus:bg-white transition-smooth shadow-sm"
-                  />
-                </div>
-              </div>
-
-              {/* Delivery Fee */}
-              <div className="space-y-2">
-                <label className="text-xs font-bold text-charcoal/60 uppercase tracking-wider block">
-                  Delivery Fee ($)
-                </label>
-                <div className="relative flex items-center">
-                  <div className="absolute left-4 text-charcoal/40">
-                    <DollarSign className="h-4 w-4" />
-                  </div>
-                  <input
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    placeholder="e.g. 3.99"
-                    value={deliveryFee}
-                    onChange={(e) => setDeliveryFee(e.target.value)}
-                    className="w-full bg-cream-dark/30 border border-cream-dark/80 rounded-2xl pl-12 pr-4 py-3.5 text-sm font-medium text-charcoal placeholder-charcoal/30 outline-none focus:border-terracotta focus:bg-white transition-smooth shadow-sm"
-                  />
-                </div>
-              </div>
-
-            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6"></div>
 
             {/* Description */}
             <div className="space-y-2">
@@ -345,7 +293,6 @@ export const AddRestaurantPage: React.FC = () => {
               <span>Onboard My Restaurant</span>
               <ArrowRight className="h-4 w-4" />
             </button>
-
           </form>
         </div>
       </main>

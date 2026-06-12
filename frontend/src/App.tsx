@@ -7,6 +7,7 @@ import ProtectedRoute from "./components/protectedRoute"
 import SelectRolePage from "./pages/SelectRolePage"
 import Accountpage from "./pages/Accountpage"
 import AddRestaurantPage from "./pages/AddRestaurantPage"
+import RestaurantDashboardPage from "./pages/RestaurantDashboardPage"
 
 const App = () => {
   return (
@@ -21,10 +22,8 @@ const App = () => {
           <Route path='/select-role' element={<SelectRolePage/>}/> 
           <Route path='/account' element={<Accountpage/>}/> 
           <Route path='/add-restaurant' element={<AddRestaurantPage/>}/>
+          <Route path='/restaurant' element={<RestaurantDashboardPage/>}/>
         </Route>
-        
-        
-        
       </Routes>
     </BrowserRouter>
   )

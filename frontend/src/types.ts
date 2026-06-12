@@ -41,8 +41,8 @@ export interface User {
 }
 
 export interface LocationData{
-  latitude: number,
-  longitude : number,
+  latitude: number| null,
+  longitude : number| null,
   formattedAddress : string
 }
 export interface AppContextType{

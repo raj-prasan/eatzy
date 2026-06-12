@@ -16,7 +16,7 @@ export interface AuthenticatedUser extends Request {
 }
 export const isAuth = asyncHandler(
   async (req: AuthenticatedUser, res: Response, next: NextFunction) => {
-
+    console.log(req.header("Authorization"))
     const token =
        req.cookies?.accessToken ||
        req.header("Authorization")?.replace("Bearer ", "");

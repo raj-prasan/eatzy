@@ -9,6 +9,7 @@ export interface IUser {
   email: String;
   image: String;
   role: String;
+  restaurantId : String | null;
 }
 
 export interface AuthenticatedUser extends Request {
@@ -38,7 +39,7 @@ export const isAuth = asyncHandler(
 export const isSeller = asyncHandler(
   async (req: AuthenticatedUser, res: Response, next: NextFunction) => {
     const user = req.user;
-    if(user && user.role !== "seller"){
+    if(user && user.role !== "restaurant"){
       throw new ApiError(401, "You are not authoriseed seller")
     }
     next();
